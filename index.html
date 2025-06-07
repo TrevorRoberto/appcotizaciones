@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cotizaciones tr3sdmx</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+      color: #333;
+    }
+    h1 {
+      color: #2d2d2d;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0 15px;
+    }
+    button {
+      background-color: #3f51b5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #303f9f;
+    }
+    .result {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cotizaciones tr3sdmx</h1>
+
+  <label for="nombreCliente">Nombre del cliente:</label>
+  <input type="text" id="nombreCliente" />
+
+  <label for="nombreProducto">Nombre del producto:</label>
+  <input type="text" id="nombreProducto" />
+
+  <label for="nombreArchivo">Nombre del archivo PDF:</label>
+  <input type="text" id="nombreArchivo" />
+
+  <label for="pesoObjeto">Peso del objeto (g):</label>
+  <input type="number" id="pesoObjeto" />
+
+  <label for="costoFilamento">Costo del filamento por kg:</label>
+  <input type="number" id="costoFilamento" />
+
+  <label for="horasImpresion">Horas de impresión:</label>
+  <input type="number" id="horasImpresion" />
+
+  <label for="minutosImpresion">Minutos de impresión:</label>
+  <input type="number" id="minutosImpresion" />
+
+  <label for="minutosPost">Minutos de post-procesado:</label>
+  <input type="number" id="minutosPost" />
+
+  <label for="costoImpresora">Costo de la impresora 3D:</label>
+  <input type="number" id="costoImpresora" />
+
+  <label for="horasPorDia">Horas de uso por día:</label>
+  <input type="number" id="horasPorDia" />
+
+  <label for="aniosVida">Años de vida útil:</label>
+  <input type="number" id="aniosVida" />
+
+  <label for="costoElectricidad">Costo por hora de electricidad:</label>
+  <input type="number" id="costoElectricidad" />
+
+  <label for="costoSupervision">Costo por hora de supervisión:</label>
+  <input type="number" id="costoSupervision" />
+
+  <label for="costoMantenimiento">Costo de mantenimiento por hora:</label>
+  <input type="number" id="costoMantenimiento" />
+
+  <label for="costoPreparacion">Costo de preparación por hora:</label>
+  <input type="number" id="costoPreparacion" />
+
+  <label for="costoPostProcesado">Costo de post-procesado por hora:</label>
+  <input type="number" id="costoPostProcesado" />
+
+  <label for="porcentajeMerma">Porcentaje de merma estimada (%):</label>
+  <input type="number" id="porcentajeMerma" />
+
+  <label for="porcentajeGanancia">Porcentaje de ganancia (%):</label>
+  <input type="number" id="porcentajeGanancia" />
+
+  <label for="iva">IVA (%):</label>
+  <input type="number" id="iva" />
+
+  <button onclick="generarCotizacion()">Generar cotización (PDF)</button>
+
+  <div class="result" id="resultados"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    async function generarCotizacion() {
+      const nombreCliente = document.getElementById("nombreCliente").value;
+      const nombreProducto = document.getElementById("nombreProducto").value;
+      const nombreArchivo = document.getElementById("nombreArchivo").value || "cotizacion_TR3SDMX";
+
+      const peso = parseFloat(document.getElementById("pesoObjeto").value);
+      const costoFilamento = parseFloat(document.getElementById("costoFilamento").value);
+      const horas = parseFloat(document.getElementById("horasImpresion").value);
+      const minutos = parseFloat(document.getElementById("minutosImpresion").value);
+      const minutosPost = parseFloat(document.getElementById("minutosPost").value);
+      const costoImpresora = parseFloat(document.getElementById("costoImpresora").value);
+      const horasPorDia = parseFloat(document.getElementById("horasPorDia").value);
+      const aniosVida = parseFloat(document.getElementById("aniosVida").value);
+      const costoElectricidad = parseFloat(document.getElementById("costoElectricidad").value);
+      const costoSupervision = parseFloat(document.getElementById("costoSupervision").value);
+      const costoMantenimiento = parseFloat(document.getElementById("costoMantenimiento").value);
+      const costoPreparacion = parseFloat(document.getElementById("costoPreparacion").value);
+      const costoPostProcesado = parseFloat(document.getElementById("costoPostProcesado").value);
+      const porcentajeMerma = parseFloat(document.getElementById("porcentajeMerma").value);
+      const porcentajeGanancia = parseFloat(document.getElementById("porcentajeGanancia").value);
+      const iva = parseFloat(document.getElementById("iva").value);
+
+      const horasTotales = horas + minutos / 60;
+      const horasVidaTotal = horasPorDia * 365 * aniosVida;
+      const depreciacionHora = costoImpresora / horasVidaTotal;
+
+      const depreciacion = depreciacionHora * horasTotales;
+      const electricidad = costoElectricidad * horasTotales;
+      const mantenimiento = costoMantenimiento * horasTotales;
+      const supervision = costoSupervision * horasTotales;
+      const costoMaterial = (peso / 1000) * costoFilamento;
+      const merma = (costoMaterial * porcentajeMerma) / 100;
+
+      const usoMaquina = depreciacion + electricidad + mantenimiento + supervision;
+      const preparacion = costoPreparacion;
+      const postprocesado = (minutosPost / 60) * costoPostProcesado;
+
+      const subtotal = usoMaquina + costoMaterial + preparacion + postprocesado + merma;
+      const ganancia = (subtotal * porcentajeGanancia) / 100;
+      const totalSinIVA = subtotal + ganancia;
+      const totalIVA = (totalSinIVA * iva) / 100;
+      const totalFinal = totalSinIVA + totalIVA;
+
+      document.getElementById("resultados").innerHTML = `
+        <strong>Total sugerido:</strong> <strong>$${totalFinal.toFixed(2)}</strong>
+      `;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const logo = new Image();
+      logo.src = "logo.png";
+
+      logo.onload = function () {
+        doc.addImage(logo, "PNG", 150, 10, 40, 40);
+        doc.setFontSize(14);
+        doc.text("Cotización - tr3sdmx", 20, 20);
+        doc.setFontSize(12);
+        doc.text(`Nombre del cliente: ${nombreCliente}`, 20, 40);
+        doc.text(`Nombre del producto: ${nombreProducto}`, 20, 50);
+        doc.text(`Fecha: ${new Date().toLocaleString()}`, 20, 60);
+        doc.text(`Total sugerido: $${totalFinal.toFixed(2)}`, 20, 70);
+        doc.save(`${nombreArchivo}.pdf`);
+      };
+    }
+  </script>
+</body>
+</html>
