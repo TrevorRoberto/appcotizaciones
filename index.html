@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cotizador TR3SDMX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Cotizador TR3SDMX</h1>
+
+  <label for="nombreCliente">Nombre del cliente:</label>
+  <input type="text" id="nombreCliente" required>
+
+  <label for="nombreProducto">Nombre del producto:</label>
+  <input type="text" id="nombreProducto" required>
+
+  <label for="nombreArchivo">Nombre del archivo PDF:</label>
+  <input type="text" id="nombreArchivo" placeholder="ej: cotizacion_juan_perez">
+
+  <label for="depreciacion">Depreciación (MXN):</label>
+  <input type="number" id="depreciacion" step="0.01" value="0">
+
+  <label for="electricidad">Electricidad (MXN):</label>
+  <input type="number" id="electricidad" step="0.01" value="0">
+
+  <label for="mantenimiento">Mantenimiento (MXN):</label>
+  <input type="number" id="mantenimiento" step="0.01" value="0">
+
+  <label for="supervision">Supervisión (MXN):</label>
+  <input type="number" id="supervision" step="0.01" value="0">
+
+  <label for="costoMaterial">Costo del material (MXN):</label>
+  <input type="number" id="costoMaterial" step="0.01" value="0">
+
+  <label for="usoMaquina">Uso de máquina (MXN):</label>
+  <input type="number" id="usoMaquina" step="0.01" value="0">
+
+  <label for="preparacion">Preparación (MXN):</label>
+  <input type="number" id="preparacion" step="0.01" value="0">
+
+  <label for="postprocesado">Post-procesado (MXN):</label>
+  <input type="number" id="postprocesado" step="0.01" value="0">
+
+  <label for="merma">Merma (MXN):</label>
+  <input type="number" id="merma" step="0.01" value="0">
+
+  <button onclick="generarCotizacion()">Generar cotización (PDF)</button>
+
+  <!-- Cargar jsPDF desde CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    async function generarCotizacion() {
+      const nombreCliente = document.getElementById("nombreCliente").value;
+      const nombreProducto = document.getElementById("nombreProducto").value;
+      const nombreArchivo = document.getElementById("nombreArchivo").value;
+
+      const depreciacion = parseFloat(document.getElementById("depreciacion").value) || 0;
+      const electricidad = parseFloat(document.getElementById("electricidad").value) || 0;
+      const mantenimiento = parseFloat(document.getElementById("mantenimiento").value) || 0;
+      const supervision = parseFloat(document.getElementById("supervision").value) || 0;
+      const costoMaterial = parseFloat(document.getElementById("costoMaterial").value) || 0;
+      const usoMaquina = parseFloat(document.getElementById("usoMaquina").value) || 0;
+      const preparacion = parseFloat(document.getElementById("preparacion").value) || 0;
+      const postprocesado = parseFloat(document.getElementById("postprocesado").value) || 0;
+      const merma = parseFloat(document.getElementById("merma").value) || 0;
+
+      const totalFinal = depreciacion + electricidad + mantenimiento + supervision + costoMaterial + usoMaquina + preparacion + postprocesado + merma;
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(12);
+      doc.text(`Cotización TR3SDMX`, 10, 10);
+      doc.text(`Cliente: ${nombreCliente}`, 10, 20);
+      doc.text(`Producto: ${nombreProducto}`, 10, 30);
+      doc.text(`-------------------------`, 10, 40);
+      doc.text(`Depreciación: $${depreciacion.toFixed(2)}`, 10, 50);
+      doc.text(`Electricidad: $${electricidad.toFixed(2)}`, 10, 60);
+      doc.text(`Mantenimiento: $${mantenimiento.toFixed(2)}`, 10, 70);
+      doc.text(`Supervisión: $${supervision.toFixed(2)}`, 10, 80);
+      doc.text(`Material: $${costoMaterial.toFixed(2)}`, 10, 90);
+      doc.text(`Uso máquina: $${usoMaquina.toFixed(2)}`, 10, 100);
+      doc.text(`Preparación: $${preparacion.toFixed(2)}`, 10, 110);
+      doc.text(`Post-procesado: $${postprocesado.toFixed(2)}`, 10, 120);
+      doc.text(`Merma: $${merma.toFixed(2)}`, 10, 130);
+      doc.text(`-------------------------`, 10, 140);
+      doc.text(`TOTAL: $${totalFinal.toFixed(2)}`, 10, 150);
+
+      const nombreFinal = nombreArchivo.trim() !== "" ? nombreArchivo.trim() : "cotizacion_TR3SDMX";
+      doc.save(`${nombreFinal}.pdf`);
+    }
+  </script>
+
+</body>
+</html>
