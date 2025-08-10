@@ -160,13 +160,19 @@
       `;
 
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: [210, 150] // ancho x alto en milímetros
+      });
+
 
       const logo = new Image();
       logo.src = "logo.png";
 
       logo.onload = function () {
-        doc.addImage(logo, "PNG", 160, 20, 50, 50);
+        const pageWidth = doc.internal.pageSize.getWidth();
+        doc.addImage(logo, "PNG", pageWidth - 70, 10, 60, 60);
         doc.setFontSize(14);
         doc.text("Cotización - Impresueños", 20, 20);
         doc.setFontSize(12);
@@ -174,6 +180,11 @@
         doc.text(`Nombre del producto: ${nombreProducto}`, 20, 50);
         doc.text(`Fecha: ${new Date().toLocaleString()}`, 20, 60);
         doc.text(`Precio Total: $${totalFinal.toFixed(2)}`, 20, 70);
+        doc.setFontSize(10);
+        doc.text("WhatsApp: +52 56 4908 0444", 20, 90);
+        doc.text("Facebook / TikTok / Instagram: @Impresueños", 20, 100);
+        doc.text("Gracias por tu preferencia ❤️", 20, 110);
+
         doc.save(`${nombreArchivo}.pdf`);
       };
     }
