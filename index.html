@@ -47,7 +47,7 @@
   </style>
 </head>
 <body>
-  <h1>Cotizaciones tr3sdmx</h1>
+  <h1>Cotizaciones - Impresueños</h1>
 
   <label for="nombreCliente">Nombre del cliente:</label>
   <input type="text" id="nombreCliente" />
@@ -166,9 +166,9 @@
       logo.src = "logo.png";
 
       logo.onload = function () {
-        doc.addImage(logo, "PNG", 150, 10, 40, 40);
+        doc.addImage(logo, "PNG", 160, 20, 50, 50);
         doc.setFontSize(14);
-        doc.text("Cotización - tr3sdmx", 20, 20);
+        doc.text("Cotización - Impresueños", 20, 20);
         doc.setFontSize(12);
         doc.text(`Nombre del cliente: ${nombreCliente}`, 20, 40);
         doc.text(`Nombre del producto: ${nombreProducto}`, 20, 50);
