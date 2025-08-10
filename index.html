@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -49,65 +48,47 @@
 <body>
   <h1>Cotizaciones - Impresueños</h1>
 
+  <!-- Formulario -->
   <label for="nombreCliente">Nombre del cliente:</label>
   <input type="text" id="nombreCliente" />
-
   <label for="nombreProducto">Nombre del producto:</label>
   <input type="text" id="nombreProducto" />
-
   <label for="nombreArchivo">Nombre del archivo PDF:</label>
   <input type="text" id="nombreArchivo" />
-
   <label for="pesoObjeto">Peso del objeto (g):</label>
   <input type="number" id="pesoObjeto" />
-
   <label for="costoFilamento">Costo del filamento por kg:</label>
   <input type="number" id="costoFilamento" />
-
   <label for="horasImpresion">Horas de impresión:</label>
   <input type="number" id="horasImpresion" />
-
   <label for="minutosImpresion">Minutos de impresión:</label>
   <input type="number" id="minutosImpresion" />
-
   <label for="minutosPost">Minutos de post-procesado:</label>
   <input type="number" id="minutosPost" />
-
   <label for="costoImpresora">Costo de la impresora 3D:</label>
   <input type="number" id="costoImpresora" />
-
   <label for="horasPorDia">Horas de uso por día:</label>
   <input type="number" id="horasPorDia" />
-
   <label for="aniosVida">Años de vida útil:</label>
   <input type="number" id="aniosVida" />
-
   <label for="costoElectricidad">Costo por hora de electricidad:</label>
   <input type="number" id="costoElectricidad" />
-
   <label for="costoSupervision">Costo por hora de supervisión:</label>
   <input type="number" id="costoSupervision" />
-
   <label for="costoMantenimiento">Costo de mantenimiento por hora:</label>
   <input type="number" id="costoMantenimiento" />
-
   <label for="costoPreparacion">Costo de preparación por hora:</label>
   <input type="number" id="costoPreparacion" />
-
   <label for="costoPostProcesado">Costo de post-procesado por hora:</label>
   <input type="number" id="costoPostProcesado" />
-
   <label for="porcentajeMerma">Porcentaje de merma estimada (%):</label>
   <input type="number" id="porcentajeMerma" />
-
   <label for="porcentajeGanancia">Porcentaje de ganancia (%):</label>
   <input type="number" id="porcentajeGanancia" />
-
   <label for="iva">IVA (%):</label>
   <input type="number" id="iva" />
 
   <button onclick="generarCotizacion()">Generar cotización (PDF)</button>
-
   <div class="result" id="resultados"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -163,31 +144,30 @@
       const doc = new jsPDF({
         orientation: "portrait",
         unit: "mm",
-        format: [210, 150] // ancho x alto en milímetros
+        format: [210, 150]
       });
-
 
       const logo = new Image();
       logo.src = "logo.png";
 
       logo.onload = function () {
         const pageWidth = doc.internal.pageSize.getWidth();
-        doc.addImage(logo, "PNG", pageWidth - 70, 10, 60, 60);
+
+        // Logo ajustado y bien posicionado
+        doc.addImage(logo, "PNG", pageWidth - 55, 12, 40, 40);
+
+        // Fuente uniforme simulando Calibri Bold
+        doc.setFont("helvetica", "bold");
+
         doc.setFontSize(14);
         doc.text("Cotización - Impresueños", 20, 20);
+
         doc.setFontSize(12);
         doc.text(`Nombre del cliente: ${nombreCliente}`, 20, 40);
         doc.text(`Nombre del producto: ${nombreProducto}`, 20, 50);
         doc.text(`Fecha: ${new Date().toLocaleString()}`, 20, 60);
         doc.text(`Precio Total: $${totalFinal.toFixed(2)}`, 20, 70);
+
         doc.setFontSize(10);
         doc.text("WhatsApp: +52 56 4908 0444", 20, 90);
-        doc.text("Facebook / TikTok / Instagram: @Impresueños", 20, 100);
-        doc.text("Gracias por tu preferencia ❤️", 20, 110);
-
-        doc.save(`${nombreArchivo}.pdf`);
-      };
-    }
-  </script>
-</body>
-</html>
+        doc.text("Facebook
