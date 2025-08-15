@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cotizaciones Impresueños</title>
+  <title>Cotizaciones tr3sdmx</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,7 +14,6 @@
     }
     h1 {
       color: #2d2d2d;
-      text-align: center;
     }
     label {
       display: block;
@@ -26,16 +26,16 @@
       margin: 5px 0 15px;
     }
     button {
-      background-color: #3f51b5;
+      background-color: #009688;
       color: white;
       border: none;
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
-      width: 100%;
+      border-radius: 5px;
     }
     button:hover {
-      background-color: #303f9f;
+      background-color: #00796b;
     }
     .result {
       background-color: #fff;
@@ -46,46 +46,109 @@
   </style>
 </head>
 <body>
-  <h1>Cotizaciones - Impresueños</h1>
+  <h1>Cotizaciones tr3sdmx</h1>
 
-  <!-- Formulario -->
-  <!-- ... (todos los inputs como ya los tienes) ... -->
+  <!-- Datos del modelo -->
+  <label>Peso del objeto (g):</label>
+  <input type="number" id="pesoObjeto" />
+
+  <label>Costo del filamento por kg:</label>
+  <input type="number" id="costoFilamento" />
+
+  <!-- Tiempo de impresión -->
+  <label>Horas de impresión:</label>
+  <input type="number" id="horasImpresion" />
+
+  <label>Minutos de impresión:</label>
+  <input type="number" id="minutosImpresion" />
+
+  <label>Minutos de post-procesado:</label>
+  <input type="number" id="minutosPost" />
+
+  <!-- Costos por hora -->
+  <label>Costo de la impresora 3D:</label>
+  <input type="number" id="costoImpresora" />
+
+  <label>Horas de uso por día:</label>
+  <input type="number" id="horasPorDia" />
+
+  <label>Años de vida útil:</label>
+  <input type="number" id="aniosVida" />
+
+  <label>Costo por hora de electricidad:</label>
+  <input type="number" id="costoElectricidad" />
+
+  <label>Costo por hora de supervisión:</label>
+  <input type="number" id="costoSupervision" />
+
+  <label>Costo de mantenimiento por hora:</label>
+  <input type="number" id="costoMantenimiento" />
+
+  <!-- Mano de obra -->
+  <label>Costo de preparación por hora:</label>
+  <input type="number" id="costoPreparacion" />
+
+  <!-- Postprocesado -->
+  <label>Costo de post-procesado por hora:</label>
+  <input type="number" id="costoPostProcesado" />
+
+  <!-- Merma, ganancia e IVA -->
+  <label>Porcentaje de merma estimada (%):</label>
+  <input type="number" id="porcentajeMerma" />
+
+  <label>Porcentaje de ganancia (%):</label>
+  <input type="number" id="porcentajeGanancia" />
+
+  <label>IVA (%):</label>
+  <input type="number" id="iva" />
+
+  <!-- Datos del cliente -->
+  <label>Nombre del cliente:</label>
+  <input type="text" id="nombreCliente" />
+
+  <label>Nombre del producto:</label>
+  <input type="text" id="nombreProducto" />
+
+  <label>Nombre del archivo PDF:</label>
+  <input type="text" id="nombreArchivo" placeholder="ej: cotizacion_juan_perez" />
 
   <button onclick="generarCotizacion()">Generar cotización (PDF)</button>
-  <div class="result" id="resultados"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <div class="result" id="resultados">
+    <!-- Aquí se mostrarán los resultados -->
+  </div>
+
   <script>
     async function generarCotizacion() {
+      const peso = parseFloat(document.getElementById("pesoObjeto").value) || 0;
+      const costoFilamento = parseFloat(document.getElementById("costoFilamento").value) || 0;
+      const horas = parseFloat(document.getElementById("horasImpresion").value) || 0;
+      const minutos = parseFloat(document.getElementById("minutosImpresion").value) || 0;
+      const minutosPost = parseFloat(document.getElementById("minutosPost").value) || 0;
+      const costoImpresora = parseFloat(document.getElementById("costoImpresora").value) || 0;
+      const horasPorDia = parseFloat(document.getElementById("horasPorDia").value) || 0;
+      const aniosVida = parseFloat(document.getElementById("aniosVida").value) || 0;
+      const costoElectricidad = parseFloat(document.getElementById("costoElectricidad").value) || 0;
+      const costoSupervision = parseFloat(document.getElementById("costoSupervision").value) || 0;
+      const costoMantenimiento = parseFloat(document.getElementById("costoMantenimiento").value) || 0;
+      const costoPreparacion = parseFloat(document.getElementById("costoPreparacion").value) || 0;
+      const costoPostProcesado = parseFloat(document.getElementById("costoPostProcesado").value) || 0;
+      const porcentajeMerma = parseFloat(document.getElementById("porcentajeMerma").value) || 0;
+      const porcentajeGanancia = parseFloat(document.getElementById("porcentajeGanancia").value) || 0;
+      const iva = parseFloat(document.getElementById("iva").value) || 0;
       const nombreCliente = document.getElementById("nombreCliente").value;
       const nombreProducto = document.getElementById("nombreProducto").value;
-      const nombreArchivo = document.getElementById("nombreArchivo").value || "cotizacion_TR3SDMX";
-
-      const peso = parseFloat(document.getElementById("pesoObjeto").value);
-      const costoFilamento = parseFloat(document.getElementById("costoFilamento").value);
-      const horas = parseFloat(document.getElementById("horasImpresion").value);
-      const minutos = parseFloat(document.getElementById("minutosImpresion").value);
-      const minutosPost = parseFloat(document.getElementById("minutosPost").value);
-      const costoImpresora = parseFloat(document.getElementById("costoImpresora").value);
-      const horasPorDia = parseFloat(document.getElementById("horasPorDia").value);
-      const aniosVida = parseFloat(document.getElementById("aniosVida").value);
-      const costoElectricidad = parseFloat(document.getElementById("costoElectricidad").value);
-      const costoSupervision = parseFloat(document.getElementById("costoSupervision").value);
-      const costoMantenimiento = parseFloat(document.getElementById("costoMantenimiento").value);
-      const costoPreparacion = parseFloat(document.getElementById("costoPreparacion").value);
-      const costoPostProcesado = parseFloat(document.getElementById("costoPostProcesado").value);
-      const porcentajeMerma = parseFloat(document.getElementById("porcentajeMerma").value);
-      const porcentajeGanancia = parseFloat(document.getElementById("porcentajeGanancia").value);
-      const iva = parseFloat(document.getElementById("iva").value);
+      const nombreArchivo = document.getElementById("nombreArchivo").value || "cotizacion";
 
       const horasTotales = horas + minutos / 60;
       const horasVidaTotal = horasPorDia * 365 * aniosVida;
-      const depreciacionHora = costoImpresora / horasVidaTotal;
+      const depreciacionHora = horasVidaTotal > 0 ? costoImpresora / horasVidaTotal : 0;
 
       const depreciacion = depreciacionHora * horasTotales;
       const electricidad = costoElectricidad * horasTotales;
       const mantenimiento = costoMantenimiento * horasTotales;
       const supervision = costoSupervision * horasTotales;
+
       const costoMaterial = (peso / 1000) * costoFilamento;
       const merma = (costoMaterial * porcentajeMerma) / 100;
 
@@ -100,51 +163,45 @@
       const totalFinal = totalSinIVA + totalIVA;
 
       document.getElementById("resultados").innerHTML = `
+        <strong>Depreciación:</strong> $${depreciacion.toFixed(2)}<br>
+        <strong>Electricidad:</strong> $${electricidad.toFixed(2)}<br>
+        <strong>Mantenimiento:</strong> $${mantenimiento.toFixed(2)}<br>
+        <strong>Supervisión:</strong> $${supervision.toFixed(2)}<br>
+        <strong>Costo de material:</strong> $${costoMaterial.toFixed(2)}<br>
+        <strong>Uso de máquina:</strong> $${usoMaquina.toFixed(2)}<br>
+        <strong>Preparación:</strong> $${preparacion.toFixed(2)}<br>
+        <strong>Post-procesado:</strong> $${postprocesado.toFixed(2)}<br>
+        <strong>Merma aplicada:</strong> $${merma.toFixed(2)}<br>
         <strong>Total sugerido:</strong> <strong>$${totalFinal.toFixed(2)}</strong>
       `;
 
-      const logo = new Image();
-      logo.src = "logo.png";
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
 
-      logo.onload = function () {
-        generarPDF(true, logo);
-      };
-
-      logo.onerror = function () {
-        generarPDF(false);
-      };
-
-      function generarPDF(conLogo, logoImg = null) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({
-          orientation: "portrait",
-          unit: "mm",
-          format: [210, 150]
+      // Cargar el logo
+      let imgData;
+      try {
+        const response = await fetch("logo.png");
+        const blob = await response.blob();
+        imgData = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
         });
-
-        const pageWidth = doc.internal.pageSize.getWidth();
-
-        if (conLogo && logoImg) {
-          doc.addImage(logoImg, "PNG", pageWidth - 55, 12, 40, 40);
-        }
-
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(14);
-        doc.text("Cotización - Impresueños", 20, 20);
-
-        doc.setFontSize(12);
-        doc.text(`Nombre del cliente: ${nombreCliente}`, 20, 40);
-        doc.text(`Nombre del producto: ${nombreProducto}`, 20, 50);
-        doc.text(`Fecha: ${new Date().toLocaleString()}`, 20, 60);
-        doc.text(`Precio Total: $${totalFinal.toFixed(2)}`, 20, 70);
-
-        doc.setFontSize(10);
-        doc.text("WhatsApp: +52 56 4908 0444", 20, 90);
-        doc.text("Facebook / TikTok / Instagram: @Impresueños", 20, 100);
-        doc.text("Gracias por tu preferencia", 20, 110);
-
-        doc.save(`${nombreArchivo}.pdf`);
+        doc.addImage(imgData, "PNG", 150, 10, 40, 40);
+      } catch (e) {
+        console.warn("Logo no encontrado o error al cargarlo.");
       }
+
+      doc.setFontSize(18);
+      doc.text("Cotización - tr3sdmx", 10, 20);
+
+      doc.setFontSize(12);
+      doc.text(`Nombre del cliente: ${nombreCliente}`, 10, 50);
+      doc.text(`Nombre del producto: ${nombreProducto}`, 10, 60);
+      doc.text(`Precio total: $${totalFinal.toFixed(2)}`, 10, 70);
+
+      doc.save(`${nombreArchivo}.pdf`);
     }
   </script>
 </body>
