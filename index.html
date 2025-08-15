@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cotizaciones tr3sdmx</title>
+  <title>Cotizaciones Impresueños</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
@@ -46,7 +46,7 @@
   </style>
 </head>
 <body>
-  <h1>Cotizaciones tr3sdmx</h1>
+  <h1>Cotizaciones Impresueños</h1>
 
   <!-- Datos del modelo -->
   <label>Peso del objeto (g):</label>
@@ -188,13 +188,13 @@
           reader.onload = () => resolve(reader.result);
           reader.readAsDataURL(blob);
         });
-        doc.addImage(imgData, "PNG", 150, 10, 40, 40);
+        doc.addImage(imgData, "PNG", 150, 10, 40, 48);
       } catch (e) {
         console.warn("Logo no encontrado o error al cargarlo.");
       }
 
       doc.setFontSize(18);
-      doc.text("Cotización - tr3sdmx", 10, 20);
+      doc.text("Cotización - Impresueños", 10, 20);
 
       doc.setFontSize(12);
       doc.text(`Nombre del cliente: ${nombreCliente}`, 10, 50);
