@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cotizaciones Impresueños</title>
+  <title>Cotizaciones ImpreSueños</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
@@ -46,7 +46,7 @@
   </style>
 </head>
 <body>
-  <h1>Cotizaciones Impresueños</h1>
+  <h1>Cotizaciones ImpreSueños</h1>
 
   <!-- Datos del modelo -->
   <label>Peso del objeto (g):</label>
@@ -179,27 +179,35 @@
       const doc = new jsPDF();
 
       // Cargar el logo
-      let imgData;
       try {
         const response = await fetch("logo.png");
         const blob = await response.blob();
-        imgData = await new Promise((resolve) => {
+        const imgData = await new Promise((resolve) => {
           const reader = new FileReader();
           reader.onload = () => resolve(reader.result);
           reader.readAsDataURL(blob);
         });
-        doc.addImage(imgData, "PNG", 150, 10, 40, 48);
+        // Logo más grande y proporcionado
+        doc.addImage(imgData, "PNG", 140, 10, 50, 50);
       } catch (e) {
         console.warn("Logo no encontrado o error al cargarlo.");
       }
 
       doc.setFontSize(18);
-      doc.text("Cotización - Impresueños", 10, 20);
+      doc.text("Cotización - ImpreSueños", 10, 20);
 
+      const fechaHora = new Date().toLocaleString();
       doc.setFontSize(12);
+      doc.text(`Fecha y hora: ${fechaHora}`, 10, 30);
+
       doc.text(`Nombre del cliente: ${nombreCliente}`, 10, 50);
       doc.text(`Nombre del producto: ${nombreProducto}`, 10, 60);
       doc.text(`Precio total: $${totalFinal.toFixed(2)}`, 10, 70);
+
+      // Redes sociales
+      doc.text("Redes sociales: @impresuenos 📘📸🎵", 10, 100);
+      doc.text("Whatsapp: 5649080444", 10, 110);
+      doc.text("Gracias por tu preferencia ❤️", 10, 120);
 
       doc.save(`${nombreArchivo}.pdf`);
     }
